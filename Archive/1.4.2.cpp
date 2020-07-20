@@ -5,7 +5,7 @@
 using namespace std;
 
 class FunctionPart {
-    
+
 private:
     char operation;
     double value;
