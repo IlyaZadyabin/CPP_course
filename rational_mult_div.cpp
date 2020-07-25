@@ -1,6 +1,5 @@
 #include <iostream>
 #include <numeric>
-#include <sstream>
 using namespace std;
 
 class Rational {
@@ -58,66 +57,30 @@ public:
         return denominator;
     }
 
-    friend istream & operator>>(istream & stream, Rational & obj);
-    friend ostream & operator<<(ostream & stream, const Rational & obj);
-
 private:
     int numerator, denominator;
 };
 
-istream & operator>>(istream & stream, Rational & obj) {
-    int tmp_num, tmp_den;
-    if(!stream.eof()){
-        stream >> tmp_num;
-        stream.ignore(1);
-        stream >> tmp_den;
-        obj = {tmp_num, tmp_den};
-    }
-    return stream;
-}
-
-ostream & operator<<(ostream & stream, const Rational & obj) {
-    stream << obj.numerator << "/" << obj.denominator;
-    return stream;
-}
-
 int main() {
     {
-        ostringstream output;
-        output << Rational(-6, 8);
-        if (output.str() != "-3/4") {
-            cout << "Rational(-6, 8) should be written as \"-3/4\"" << endl;
+        Rational a(2, 3);
+        Rational b(4, 3);
+        Rational c = a * b;
+        bool equal = c == Rational(8, 9);
+        if (!equal) {
+            cout << "2/3 * 4/3 != 8/9" << endl;
             return 1;
         }
     }
 
     {
-        istringstream input("5/7");
-        Rational r;
-        input >> r;
-        bool equal = r == Rational(5, 7);
+        Rational a(5, 4);
+        Rational b(15, 8);
+        Rational c = a / b;
+        bool equal = c == Rational(2, 3);
         if (!equal) {
-            cout << "5/7 is incorrectly read as " << r << endl;
+            cout << "5/4 / 15/8 != 2/3" << endl;
             return 2;
-        }
-    }
-
-    {
-        istringstream input("5/7 10/8");
-        Rational r1, r2;
-        input >> r1 >> r2;
-        bool correct = r1 == Rational(5, 7) && r2 == Rational(5, 4);
-        if (!correct) {
-            cout << "Multiple values are read incorrectly: " << r1 << " " << r2 << endl;
-            return 3;
-        }
-
-        input >> r1;
-        input >> r2;
-        correct = r1 == Rational(5, 7) && r2 == Rational(5, 4);
-        if (!correct) {
-            cout << "Read from empty stream shouldn't change arguments: " << r1 << " " << r2 << endl;
-            return 4;
         }
     }
 
