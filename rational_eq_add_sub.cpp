@@ -9,14 +9,14 @@ public:
         denominator = 1;
     }
 
-    Rational operator+(Rational & obj) const{
+    Rational operator+(const Rational & obj) const{
         Rational res;
         int LCM = lcm(denominator, obj.denominator);
         int tmp_numenator = numerator * LCM / denominator + obj.numerator * LCM / obj.denominator;
         return {tmp_numenator, LCM};
     }
 
-    Rational operator-(Rational & obj) const{
+    Rational operator-(const Rational & obj) const{
         Rational res;
         int LCM = lcm(denominator, obj.denominator);
         int tmp_numenator = numerator * LCM / denominator - obj.numerator * LCM / obj.denominator;
