@@ -99,7 +99,11 @@ int main() {
                 db.AddEvent(date, event);
             } else if(task == "Del"){
                 if(command_stream >> event){
-                    db.DeleteEvent(date, event);
+                    if(db.DeleteEvent(date, event)){
+                        cout << "Deleted successfully" << endl;
+                    } else {
+                        cout << "Event not found" << endl;
+                    }
                 } else {
                     db.DeleteDate(date);
                 }
