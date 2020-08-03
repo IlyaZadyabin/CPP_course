@@ -12,9 +12,10 @@ private:
     int year{}, month{}, day{};
 public:
     explicit Date(const string& date_string){
-        char denom;
+        char first_denom, second_denom;
         stringstream date_stream(date_string);
-        if(!(date_stream >> year >> denom >> month >> denom >> day)){
+        if(!(date_stream >> year >> first_denom >> month >> second_denom >> day) ||
+                first_denom != '-' || second_denom != '-' || !date_stream.eof()){
             throw invalid_argument("Wrong date format: " + date_string);
         } else if(month < 1 || month > 12){
             throw invalid_argument("Month value is invalid: " + to_string(month));
@@ -55,12 +56,7 @@ public:
         table[date].insert(event);
     }
     bool DeleteEvent(const Date& date, const string& event){
-        if(table[date].find(event) != table[date].end()){
-            table[date].erase(event);
-            return true;
-        } else {
-            return false;
-        }
+        return table[date].erase(event) != 0;
     }
     int DeleteDate(const Date& date){
         int ans = table[date].size();
@@ -68,8 +64,8 @@ public:
         return ans;
     }
 
-    set<string> Find(const Date& date) const{
-        return table.at(date);
+    set<string> Find(const Date& date) {
+        return table[date];
     }
 
     void Print() const{
@@ -97,7 +93,7 @@ int main() {
                 db.Print();
             } else {
                 if(task != "Add" && task != "Del" && task != "Find") {
-                    throw invalid_argument("Unknown command");
+                    throw invalid_argument("Unknown command: " + task);
                 }
                 command_stream >> date_string;
                 Date date(date_string);
@@ -123,7 +119,7 @@ int main() {
                     }
                 }
             }
-        } catch (const exception & ex){
+        } catch (const invalid_argument & ex){
             cout << ex.what() << endl;
         }
     }

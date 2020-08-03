@@ -3,21 +3,21 @@
 #include <string>
 #include <map>
 #include <set>
-#include <sstream>
 #include <iomanip>
 
 using namespace std;
 
 class Date {
 private:
-    int year, month, day;
+    int year{}, month{}, day{};
 public:
-    Date(const string& date_string){
-        char denom;
+    explicit Date(const string& date_string){
+        char first_denom, second_denom;
         stringstream date_stream(date_string);
-        if(!(date_stream >> year >> denom >> month >> denom >> day)){
+        if(!(date_stream >> year >> first_denom >> month >> second_denom >> day) ||
+           first_denom != '-' || second_denom != '-' || !date_stream.eof()){
             throw invalid_argument("Wrong date format: " + date_string);
-        } else if(month < 0 || month > 12){
+        } else if(month < 1 || month > 12){
             throw invalid_argument("Month value is invalid: " + to_string(month));
         } else if(day < 1 || day > 31){
             throw invalid_argument("Day value is invalid: " + to_string(day));
@@ -56,13 +56,7 @@ public:
         table[date].insert(event);
     }
     bool DeleteEvent(const Date& date, const string& event){
-        if(table[date].find(event) != table[date].end()){
-            table[date].erase(event);
-            return true;
-        } else {
-            return false;
-        }
-
+        return table[date].erase(event) != 0;
     }
     int DeleteDate(const Date& date){
         int ans = table[date].size();
@@ -70,16 +64,16 @@ public:
         return ans;
     }
 
-    set<string> Find(const Date& date) const{
-        return table.at(date);
+    set<string> Find(const Date& date) {
+        return table[date];
     }
 
     void Print() const{
         for (const auto &[date, events] : table) {
             for (const auto &event : events) {
-                cout << fixed << setw(4) << setfill('0') << date.GetYear();
-                cout << '-' << setw(2) << date.GetMonth() << '-' << date.GetDay();
-                cout << ' ' << event << endl;
+                cout << fixed << setw(4) << setfill('0') << date.GetYear()
+                     << '-' << setw(2) << date.GetMonth() << '-' << setw(2)
+                     << date.GetDay() << ' ' << event << endl;
             }
         }
     }
@@ -90,31 +84,42 @@ int main() {
     string command, event, date_string, task;
 
     while (getline(cin, command)) {
+        if(command.empty()){ continue; }
+
         stringstream command_stream(command);
-        command_stream >> task >> date_string;
+        command_stream >> task;
         try {
-            Date date(date_string);
-            if(task == "Add"){
-                command_stream >> event;
-                db.AddEvent(date, event);
-            } else if(task == "Del"){
-                if(command_stream >> event){
-                    if(db.DeleteEvent(date, event)){
-                        cout << "Deleted successfully" << endl;
-                    } else {
-                        cout << "Event not found" << endl;
-                    }
-                } else {
-                    db.DeleteDate(date);
-                }
-            } else if(task == "Find"){
-                set<string> ans = db.Find(date);
-            } else if(task == "Print"){
+            if (task == "Print") {
                 db.Print();
             } else {
-                throw invalid_argument("Unknown command");
+                if(task != "Add" && task != "Del" && task != "Find") {
+                    throw invalid_argument("Unknown command: " + task);
+                }
+                command_stream >> date_string;
+                Date date(date_string);
+
+                if (task == "Add") {
+                    command_stream >> event;
+                    db.AddEvent(date, event);
+                } else if (task == "Del") {
+                    if (command_stream >> event) {
+                        if (db.DeleteEvent(date, event)) {
+                            cout << "Deleted successfully" << endl;
+                        } else {
+                            cout << "Event not found" << endl;
+                        }
+                    } else {
+                        int deletedEvents = db.DeleteDate(date);
+                        cout << "Deleted " << to_string(deletedEvents) << " events" << endl;
+                    }
+                } else if (task == "Find") {
+                    set<string> ans = db.Find(date);
+                    for (const auto &item : ans) {
+                        cout << item << endl;
+                    }
+                }
             }
-        } catch (const exception & ex){
+        } catch (const invalid_argument & ex){
             cout << ex.what() << endl;
         }
     }
