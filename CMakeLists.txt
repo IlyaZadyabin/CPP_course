@@ -3,4 +3,7 @@ project(CPP_course)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(CPP_course Yellow_Belt/Week4/build_expression.cpp)
+add_executable(CPP_course Yellow_Belt/final_project/token.h Yellow_Belt/final_project/token.cpp  Yellow_Belt/final_project/condition_parser.cpp
+		Yellow_Belt/final_project/condition_parser.cpp Yellow_Belt/final_project/condition_parser_test.cpp Yellow_Belt/final_project/main.cpp
+		Yellow_Belt/final_project/node.cpp Yellow_Belt/final_project/database.cpp Yellow_Belt/final_project/date.cpp
+		Yellow_Belt/final_project/test_runner.cpp Yellow_Belt/final_project/test_runner.h)
