@@ -89,7 +89,8 @@ shared_ptr<Node> ParseExpression(It& current, It end, unsigned precedence) {
 		const auto logical_operation = current->value == "AND" ? LogicalOperation::And
 															   : LogicalOperation::Or;
 		const auto current_precedence = precedences.at(logical_operation);
-		if (current_precedence <= precedence) {
+		if (current_precedence <= precedence) {.oneandonly8916
+
 			break;
 		}
 
