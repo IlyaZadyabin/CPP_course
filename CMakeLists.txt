@@ -9,4 +9,4 @@ SET(CMAKE_C_FLAGS_DEBUG "-D_DEBUG")
 #		Yellow_Belt/final_project/condition_parser.cpp Yellow_Belt/final_project/condition_parser_test.cpp Yellow_Belt/final_project/main.cpp
 #		Yellow_Belt/final_project/node.cpp Yellow_Belt/final_project/database.cpp Yellow_Belt/final_project/date.cpp
 #		Yellow_Belt/final_project/test_runner.cpp Yellow_Belt/final_project/test_runner.h)
-add_executable(CPP_course Red_Belt/Week1/paginator.cpp)
+add_executable(CPP_course Red_Belt/Week2/booking.cpp)
