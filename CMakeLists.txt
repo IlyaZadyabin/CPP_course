@@ -11,4 +11,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 #		Yellow_Belt/final_project/test_runner.cpp Yellow_Belt/final_project/test_runner.h)
 #add_executable(CPP_course Red_Belt/SearchSystem/main.cpp Red_Belt/SearchSystem/parse.cpp
 #		Red_Belt/SearchSystem/search_server.cpp)
-add_executable(CPP_course BrownBelt/Week1/secondary_index.cpp)
+add_executable(CPP_course BrownBelt/Week2/test_ini.cpp)
